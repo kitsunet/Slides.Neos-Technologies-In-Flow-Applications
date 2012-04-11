@@ -1,120 +1,319 @@
-<!doctype html>  
-<html lang="en">
-	
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
 	<head>
 		<meta charset="utf-8">
-		
-		<title>reveal.js</title>
 
-		<meta name="description" content="An easy to use CSS 3D slideshow tool for quickly creating good looking HTML presentations.">
-		<meta name="author" content="Hakim El Hattab">
-		
+		<title>The FLOW3 Form Project</title>
+
+		<meta name="description" content="Slides for the TYPO3 Developer Days 2012 based on reveal.js by Hakim El Hattab">
+		<meta name="author" content="Bastian Waidelich">
+
 		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-		
+
 		<link rel="stylesheet" href="css/reset.css">
 		<link rel="stylesheet" href="css/main.css">
 
 		<link rel="stylesheet" href="lib/zenburn.css">
 	</head>
-	
+
 	<body>
-		
+
 		<div id="reveal">
 
 			<!-- Used to fade in a background when a specific slide state is reached -->
 			<div class="state-background"></div>
-			
+
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Reveal.js</h1>
-					<h3 class="inverted">A CSS 3D Slideshow</h3>
-					<script>
-						// Delicously hacky. Look away.
-						if( navigator.userAgent.match( /(iPhone|iPad|iPod|Android)/i ) )
-						document.write( '<p style="color: rgba(0,0,0,0.3); text-shadow: none;">('+'Tap to navigate'+')</p>' );
-					</script>
+					<h1>FLOW3 Form Project</h1>
+					<h3 class="inverted">Flexible Form engine and graphical IDE</h3>
+					<p>by Bastian Waidelich</p>
+					<p>for T3DD12</p>
 				</section>
-				
+
 				<section>
-					<h2>Heads Up</h2>
-					<p>
-						reveal.js is an easy to use, HTML based, presentation tool. You'll need a modern browser with 
-						support for CSS 3D transforms to see it in its full glory.
-					</p>
-					<p>
-						<i><small>- <a href="http://hakim.se">Hakim El Hattab</a> / <a href="http://twitter.com/hakimel">@hakimel</a></small></i>
-					</p>
+					<h2>Bastian Waidelich</h2>
+					<ul>
+						<li>Freelancer from Cologne</li>
+						<li>31 years old</li>
+						<li>Working with TYPO3 since 2002</li>
+						<li>Member of the core team since 2008</li>
+					</ul>
 				</section>
-				
-				<!-- Example of nested vertical slides -->
+
 				<section>
 					<section>
-						<h2>Vertical Slides</h2>
+						<h2>What are forms?</h2>
+						<blockquote class="fragment" cite="http://en.wikipedia.org/wiki/Form_(web)">Wikipedia: &quot;A webform on a web page allows a user to enter data that is sent to a server for processing.&quot;</blockquote>
+					</section>
+					<section>
+						<h2>Forms are bad</h2>
+						<ul>
+							<li class="fragment">Dumb <small>(no proper validation)</small></li>
+							<li class="fragment">Oblivious <small>(forget their state & values after submission)</small></li>
+							<li class="fragment">Wasteful <small>(upload 1 Gigabyte and realize that this exceeds the allowed file size <b>afterwards</b>)</small></li>
+							<li class="fragment">Stingy <small>(only a couple of native form elements)</small></li>
+							<li class="fragment">Stubborn <small>(try styling form elements to look the same on every browser)</small></li>
+						</ul>
+						<p>&nbsp;</p>
+						<p class="fragment"><small>* <a href="http://www.w3.org/MarkUp/Forms/#waXForms">XForms</a> promises remedy for some of the issues</small></p>
+					</section>
+					<section>
+						<h2>Forms are important</h2>
+						<p class="fragment">Interactivity gets more and more important<br />
+							Forms are still the main way to enable <b>client to server</b> data transmission</p>
+						<p class="fragment">Many use cases:</p>
+						<ul>
+							<li class="fragment">Contact/mail forms</li>
+							<li class="fragment">Registration/Login</li>
+							<li class="fragment">Survey</li>
+							<li class="fragment">Setup <b class="fragment">TYPO3 Phoenix Install-Tool</b></li>
+							<li class="fragment">Create/Edit records <b class="fragment">TCEForms reloaded</b></li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>FLOW3 Form Framework</h2>
+						<p>foo bar</p>
+					</section>
+					<section>
+						<h2>Anatomy of a FLOW3 Form</h2>
+						<a href="#/3/2" class="image">
+							<img src="images/structure.png" width="800" height="590" />
+						</a>
+					</section>
+					<section>
+						<h2>Glossary</h2>
+						<dl>
+							<dt>FormDefinition</dt>
+							<dd>Domain model of the Form</dd>
+							<dt>Page</dt>
+							<dd>Step of a form, each form consists of at least one page</dd>
+							<dt>FormElement</dt>
+							<dd>The actual input element. FormElements are attached to pages or sections</dd>
+							<dt>Section</dt>
+							<dd>A container element that groups a list of FormElements, e.g. fieldset</dd>
+							<dt>Finisher</dt>
+							<dd>PHP Code that is execute after the last page of a form has been submitted</dd>
+							<dt>ProcessingRule</dt>
+							<dd>Property mapping & validation rules for one or more FormElements</dd>
+							<dt>FormRuntime</dt>
+							<dd>The current state of a form with all its submitted data</dd>
+							<dt>Renderer</dt>
+							<dd>Renders the FormDefinition and all it's elements</dd>
+							<dt>FormFactory</dt>
+							<dd>Builds a FormDefinition</dd>
+						</dl>
+					</section>
+				</section>
+
+				<section>
+					<section>
+					<h2>Creating a form</h2>
 						<p>
-							Slides can be nested inside of other slides,<br/>
-							try pressing <a href="#/2/1">down</a>.
+							<pre><code class="php">
+						class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
+						  public function build(array $configuration, $presetName) {
+						    $formConfiguration = $this->getPresetConfiguration($presetName);
+						    $formDefinition = new \TYPO3\Form\Core\Model\FormDefinition('myForm', $formConfiguration);
+						    return $formDefinition;
+						  }
+						}
+							</code></pre>
 						</p>
-						<a href="#/2/1" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
-						</a>
 					</section>
-					<section>
-						<h2>Basement Level 1</h2>
-						<p>Press down or up to navigate.</p>
-					</section>
-					<section>
-						<h2>Basement Level 2</h2>
-						<p>Cornify</p>
-						<a class="test" href="http://cornify.com">
-							<img width="280" height="326" src="https://s3.amazonaws.com/hakim-static/reveal-js/cornify.gif">
-						</a>
-					</section>
-					<section>
-						<h2>Basement Level 3</h2>
-						<p>That's it, time to go back up.</p>
-						<a href="#/2" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" style="-webkit-transform: rotate(180deg);">
-						</a>
+					<section data-state="soothe">
+						<h2>Demo</h2>
+						<div class="fragment">
+							<pre>
+								<code class="html">
+									<p class="filename">Resources/Private/Templates/Standard/Index.html</p>
+									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/bootstrap.min.css')}"
+									  rel="stylesheet" /&gt;
+									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/main.css')}"
+									  rel="stylesheet" /&gt;
+									&lt;!-- ... --&gt;
+									&lt;form:render factoryClass="FormTest\TestFormFactory" /&gt;
+								</code>
+							</pre>
+							<pre>
+								<code class="php">
+								<p class="filename">Classes/TestFormFactory.php</p>
+								class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
+
+								  /**
+								  * @param array $configuration
+								  * @param string $presetName
+								  * @return \TYPO3\Form\Core\Model\FormDefinition
+								  */
+								  public function build(array $configuration, $presetName) {
+								    $formConfiguration = $this->getPresetConfiguration($presetName);
+								    $formDefinition = new \TYPO3\Form\Core\Model\FormDefinition('contactForm', $formConfiguration);
+
+								    $page1 = $formDefinition->createPage('page1');
+
+								    $name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
+								    $name->setLabel('Name');
+								    $name->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+
+								    $email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
+								    $email->setLabel('Email');
+								    $email->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+								    $email->addValidator(new \TYPO3\FLOW3\Validation\Validator\EmailAddressValidator());
+
+								    $comment = $page1->createElement('comment', 'TYPO3.Form:MultiLineText');
+								    $comment->setLabel('Comment');
+								    $comment->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
+								    $comment->addValidator(
+								      new \TYPO3\FLOW3\Validation\Validator\StringLengthValidator(array('minimum' => 3))
+								    );
+
+								    return $formDefinition;
+								  }
+								}
+								</code>
+							</pre>
+						</div>
 					</section>
 				</section>
 
 				<section>
-					<h2>Holistic Overview</h2>
-					<p>
-						Press <strong>SPACE</strong> to enter the slide overview!
-					</p>
+					<section>
+						<h2>FormElement</h2>
+						<p>The <b>FormElement</b> is represented by the actual input element but it can be any HTML/JavaScript snippet.</p>
+						<div class="fragment">
+							<p>Provided FormElements (version 1.0):</p>
+							<dl>
+								<dt>Text input</dt>
+								<dd>SingleLineText, MultiLineText</dd>
+								<dt>Selection</dt>
+								<dd>Checkbox, SingleSelectDropdown, MultipleSelectDropdown, MultipleSelectCheckboxes</dd>
+								<dt>Widgets</dt>
+								<dd>DatePicker, FileUpload, ImageUpload</dd>
+								<dt>Container elements</dt>
+								<dd>Section, Page, PreviewPage</dd>
+							</dl>
+						</div>
+					</section>
+					<section>
+						<h2>Custom FormElements</h2>
+
+						<p class="fragment">Examples of custom FormElements:</p>
+						<ul>
+							<li class="fragment">Mass uploader</li>
+							<li class="fragment">Date/Time picker</li>
+							<li class="fragment">Conditional Elements</li>
+							<li class="fragment">Scripts (e.g. collect browser details)</li>
+						</ul>
+					</section>
+					<section data-state="soothe">
+						<h2>Demo (Fluid)</h2>
+						<div class="fragment">
+							<pre>
+								<p class="filename">Configuration/Settings.yaml</p>
+								<code class="yaml">
+									TYPO3:
+									  Form:
+									    presets:
+									      t3dd12:
+									        parentPreset: 'default'
+									        formElementTypes:
+									          'FormTest:BrowserInfo':
+									          superTypes: ['TYPO3.Form:SingleLineText']
+								</code>
+							</pre>
+							<pre>
+								<p class="filename">Resources/Private/Form/BrowserInfo.html</p>
+								<code class="html">
+									&lt;f:form.hidden property="{element.identifier}.appCodeName" id="{element.uniqueIdentifier}-appCodeName" /&gt;
+									&lt;f:form.hidden property="{element.identifier}.appName" id="{element.uniqueIdentifier}-appName" /&gt;
+									&lt;f:form.hidden property="{element.identifier}.appVersion" id="{element.uniqueIdentifier}-appVersion" /&gt;
+									&lt;f:form.hidden property="{element.identifier}.platform" id="{element.uniqueIdentifier}-platform" /&gt;
+									&lt;script&gt;
+									  var idPrefix = '{element.uniqueIdentifier}';
+									  &lt;![CDATA[
+									  document.getElementById(idPrefix + '-appCodeName').value = navigator.appCodeName;
+									  document.getElementById(idPrefix + '-appName').value = navigator.appName;
+									  document.getElementById(idPrefix + '-appVersion').value = navigator.appVersion;
+									  document.getElementById(idPrefix + '-platform').value = navigator.platform;
+									  ]]&gt;
+									&lt;/script&gt;
+								</code>
+							</pre>
+							<pre>
+								<p class="filename">Classes/TestFormFactory.php</p>
+								<code class="php">
+									// ...
+									$page1->createElement('browserInfo', 'FormTest:BrowserInfo')->setLabel('Browser info');
+									$formDefinition->createPage('preview', 'TYPO3.Form:PreviewPage');
+								</code>
+							</pre>
+						</div>
+					</section>
+					<section data-state="soothe">
+						<h2>Demo (PHP)</h2>
+						<div class="fragment">
+							<pre>
+								<p class="filename">Classes/BrowserInfoFormElement.php</p>
+								<code class="php">
+									class BrowserInfoFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
+									  public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
+									    $elementValue = array(
+									      'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-',
+									      'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-'
+									    );
+									  }
+									}
+								</code>
+							</pre>
+							<pre>
+								<p class="filename">Configuration/Settings.yaml</p>
+								<code class="yaml">
+									TYPO3:
+									  Form:
+									    presets:
+									      t3dd12:
+									        parentPreset: 'default'
+									        formElementTypes:
+									          'FormTest:BrowserInfo':
+									          superTypes: ['TYPO3.Form:SingleLineText']
+									          implementationClassName: 'FormTest\BrowserInfoFormElement'
+								</code>
+							</pre>
+						</div>
+					</section>
 				</section>
 
 				<section>
-					<h2>Transition Styles</h2>
-					<p>
-						You can select from different transitions, like:
-					</p>
-					<ul>
-						<li><a href="http://lab.hakim.se/reveal-js/?transition=cube">Cube</a></li>
-						<li><a href="http://lab.hakim.se/reveal-js/?transition=page">Page</a></li>
-						<li><a href="http://lab.hakim.se/reveal-js/?transition=concave">Concave</a></li>
-					</ul>
+					<section>
+						<h2>Finisher</h2>
+						<p>A <b>Finisher</b> is a piece of code that is executed when the <b>last page</b> of the form has been submitted successfully.</p>
+						<p class="fragment">Examples of Finishers:</p>
+						<ul>
+							<li class="fragment">Email finisher</li>
+							<li class="fragment">Write form values to Database</li>
+							<li class="fragment">Redirect to some action</li>
+							<li class="fragment">Execute arbitrary code (Closure)</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
-					<h2>Marvelous Unordered List</h2>
-					<ul>
-						<li>No order here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-						<li>Or here</li>
-					</ul>
-				</section>
-				
-				<section>
-					<h2>Fantastic Ordered List</h2>
-					<ol>
-						<li>One is smaller than...</li>
-						<li>Two is smaller than...</li>
-						<li>Three!</li>
-					</ol>
+					<section>
+						<h2>Renderer</h2>
+						<p>A <b>Form Renderer</b> outputs a <em>FormDefinition</em> and/or single <em>FormElements</em> to the client.</p>
+						<p class="fragment">Examples of custom Renderers:</p>
+						<ul>
+							<li class="fragment">Flash/Silverlight based forms</li>
+							<li class="fragment">Forms for mobile clients</li>
+							<li class="fragment">Integrate other Templating Engines</li>
+							<li class="fragment">CLI based forms</li>
+						</ul>
+					</section>
 				</section>
 
 				<section>
@@ -150,21 +349,21 @@
 						The nice thing about standards is that there are so many to choose from</q> and block:
 					</p>
 					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						For years there has been a theory that millions of monkeys typing at random on millions of typewriters would 
+						For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
 						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.
 					</blockquote>
 				</section>
-				
+
 				<section>
 					<h2>Pretty Code</h2>
 					<pre><code contenteditable>
-	var supports3DTransforms =  document.body.style['webkitPerspective'] !== undefined || 
+	var supports3DTransforms =  document.body.style['webkitPerspective'] !== undefined ||
 					document.body.style['MozPerspective'] !== undefined ||
 					document.body.style['perspective'] !== undefined;
 
 	function linkify( selector ) {
 	    if( supports3DTransforms ) {
-	        
+
 	        var nodes = document.querySelectorAll( selector );
 
 	        for( var i = 0, len = nodes.length; i < len; i++ ) {
@@ -182,7 +381,7 @@
 					</code></pre>
 					<p>Courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
 				</section>
-				
+
 				<section>
 					<h2>Intergalactic Interconnections</h2>
 					<p>
@@ -201,14 +400,14 @@
 						<li class="fragment"><strong>fragments</strong></li>
 					</ol>
 				</section>
-				
+
 				<section>
 					<h2>Spectacular image!</h2>
 					<a class="image" href="http://hakim.se/experiments/html5/breakdom/" target="_blank">
 						<img width="320" height="412" src="https://s3.amazonaws.com/hakim-static/reveal-js/breakdom.png">
 					</a>
 				</section>
-				
+
 				<section>
 					<h2>Stellar Links</h2>
 					<ul>
@@ -217,7 +416,7 @@
 						<li><a href="http://twitter.com/hakimel">Follow me on Twitter</a></li>
 					</ul>
 				</section>
-				
+
 				<section>
 					<h1>THE END</h1>
 					<h3 class="inverted">BY Hakim El Hattab / hakim.se</h3>
@@ -234,15 +433,15 @@
 
 			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
 			<div class="progress"><span></span></div>
-			
+
 		</div>
-		
+
 		<script src="js/reveal.js"></script>
 
 		<!-- Optional libraries for code syntax highlighting and classList support in IE9 -->
 		<script src="lib/highlight.js"></script>
 		<script src="lib/classList.js"></script>
-		
+
 		<script>
 			// Parse the query string into a key/value object
 			var query = {};
