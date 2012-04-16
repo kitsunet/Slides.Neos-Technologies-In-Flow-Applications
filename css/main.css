@@ -126,6 +126,7 @@ html {
 
 #reveal strong,
 #reveal b {
+	color: #FF8700;
 	font-weight: bold;
 }
 
@@ -171,7 +172,7 @@ html {
 	position: relative;
 	width: 70%;
 	margin: 5px auto;
-	padding: 5px;
+	padding: 20px;
 
 	font-style: italic;
 	background: rgba(255, 255, 255, 0.05);
@@ -191,13 +192,12 @@ html {
 	margin: 10px auto;
 
 	text-align: left;
-	font-size: 14px;
+	font-size: 16px;
 	font-family: monospace;
 	line-height: 1.1em;
 
 	word-wrap: break-word;
 
-	box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
 }
 
 #reveal code {
@@ -205,9 +205,12 @@ html {
 	max-height: 320px;
 	overflow: auto;
 }
+
 #reveal .filename {
-	float: right;
-	margin: -1.7em .5em 0 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-right: .5em;
 	font-style: italic;
 	color: #ddd;
 }
@@ -215,9 +218,6 @@ html {
 #reveal small {
 	font-size: 60%;
 	line-height: 1em;
-}
-#reveal small a {
-	vertical-align: middle !important;
 }
 
 #reveal q {
@@ -231,7 +231,8 @@ html {
 	}
 
 #reveal a:not(.image) {
-	color: hsl(185, 85%, 50%);
+	color: #FF8700;
+	font-weight: bold;
 	text-decoration: none;
 
 	-webkit-transition: all .2s ease;
@@ -299,7 +300,7 @@ html {
 	}
 		#reveal .controls a.enabled {
 			opacity: 0.6;
-			color: hsl(185, 85%, 70%);
+			color: #FF8700;
 
 			text-shadow: 0px 0px 2px hsla(185, 45%, 70%, 0.3);
 		}
@@ -344,7 +345,7 @@ html {
 
 	#reveal .progress span {
 		display: block;
-		background: hsl(185, 85%, 50%);
+		background: #FF8700;
 		height: 100%;
 		width: 0px;
 

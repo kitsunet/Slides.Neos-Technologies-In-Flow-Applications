@@ -29,18 +29,6 @@
 				<section>
 					<h1>FLOW3 Form Project</h1>
 					<h3 class="inverted">Flexible Form engine and graphical IDE</h3>
-					<p>by Bastian Waidelich</p>
-					<p>for T3DD12</p>
-				</section>
-
-				<section>
-					<h2>Bastian Waidelich</h2>
-					<ul>
-						<li>Freelancer from Cologne</li>
-						<li>31 years old</li>
-						<li>Working with TYPO3 since 2002</li>
-						<li>Member of the core team since 2008</li>
-					</ul>
 				</section>
 
 				<section>
@@ -55,15 +43,14 @@
 							<li class="fragment">Oblivious <small>(forget their state & values after submission)</small></li>
 							<li class="fragment">Wasteful <small>(upload 1 Gigabyte and realize that this exceeds the allowed file size <b>afterwards</b>)</small></li>
 							<li class="fragment">Stingy <small>(only a couple of native form elements)</small></li>
-							<li class="fragment">Stubborn <small>(try styling form elements to look the same on every browser)</small></li>
+							<li class="fragment">Stubborn <small>(poor x-browser compatibility)</small></li>
 						</ul>
 						<p>&nbsp;</p>
 						<p class="fragment"><small>* <a href="http://www.w3.org/MarkUp/Forms/#waXForms">XForms</a> promises remedy for some of the issues</small></p>
 					</section>
 					<section>
 						<h2>Forms are important</h2>
-						<p class="fragment">Interactivity gets more and more important<br />
-							Forms are still the main way to enable <b>client to server</b> data transmission</p>
+						<p class="fragment">Forms are still the main way to enable <b>client to server</b> data transmission</p>
 						<p class="fragment">Many use cases:</p>
 						<ul>
 							<li class="fragment">Contact/mail forms</li>
@@ -77,9 +64,14 @@
 
 				<section>
 					<section>
-						<h2>FLOW3 Form Framework</h2>
-						<p>foo bar</p>
+						<h1>FLOW3 Form Project</h1>
+						<ul class="fragment">
+							<li>Flexible framework</li>
+							<li>Clean API</li>
+							<li>Graphical User interface (aka <b>FormBuilder</b>)</li>
+						</ul>
 					</section>
+					<!--
 					<section>
 						<h2>Anatomy of a FLOW3 Form</h2>
 						<a href="#/3/2" class="image">
@@ -109,40 +101,29 @@
 							<dd>Builds a FormDefinition</dd>
 						</dl>
 					</section>
+					-->
 				</section>
 
 				<section>
 					<section>
-					<h2>Creating a form</h2>
-						<p>
-							<pre><code class="php">
-						class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
-						  public function build(array $configuration, $presetName) {
-						    $formConfiguration = $this->getPresetConfiguration($presetName);
-						    $formDefinition = new \TYPO3\Form\Core\Model\FormDefinition('myForm', $formConfiguration);
-						    return $formDefinition;
-						  }
-						}
-							</code></pre>
-						</p>
+						<h2>Creating a form</h2>
 					</section>
 					<section data-state="soothe">
 						<h2>Demo</h2>
 						<div class="fragment">
 							<pre>
-								<code class="html">
+								<code class="html" contenteditable="true">
 									<p class="filename">Resources/Private/Templates/Standard/Index.html</p>
-									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/bootstrap.min.css')}"
-									  rel="stylesheet" /&gt;
-									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/main.css')}"
-									  rel="stylesheet" /&gt;
+									{namespace form=TYPO3\Form\ViewHelpers}
+									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/bootstrap.min.css')}"  rel="stylesheet" /&gt;
+									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/main.css')}" rel="stylesheet" /&gt;
 									&lt;!-- ... --&gt;
-									&lt;form:render factoryClass="FormTest\TestFormFactory" /&gt;
+									&lt;form:render factoryClass="T3dd12\TestFormFactory" /&gt;
 								</code>
 							</pre>
 							<pre>
-								<code class="php">
-								<p class="filename">Classes/TestFormFactory.php</p>
+								<code class="php" contenteditable="true">
+									<p class="filename">Classes/TestFormFactory.php</p>
 								class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
 
 								  /**
@@ -194,7 +175,7 @@
 								<dd>Checkbox, SingleSelectDropdown, MultipleSelectDropdown, MultipleSelectCheckboxes</dd>
 								<dt>Widgets</dt>
 								<dd>DatePicker, FileUpload, ImageUpload</dd>
-								<dt>Container elements</dt>
+								<dt>Container</dt>
 								<dd>Section, Page, PreviewPage</dd>
 							</dl>
 						</div>
@@ -214,21 +195,21 @@
 						<h2>Demo (Fluid)</h2>
 						<div class="fragment">
 							<pre>
-								<p class="filename">Configuration/Settings.yaml</p>
-								<code class="yaml">
+								<code class="yaml" contenteditable="true">
+									<p class="filename">Configuration/Settings.yaml</p>
 									TYPO3:
 									  Form:
 									    presets:
 									      t3dd12:
 									        parentPreset: 'default'
 									        formElementTypes:
-									          'FormTest:BrowserInfo':
+									          'T3dd12:BrowserInfo':
 									          superTypes: ['TYPO3.Form:SingleLineText']
 								</code>
 							</pre>
 							<pre>
-								<p class="filename">Resources/Private/Form/BrowserInfo.html</p>
-								<code class="html">
+								<code class="html" contenteditable="true">
+									<p class="filename">Resources/Private/Form/BrowserInfo.html</p>
 									&lt;f:form.hidden property="{element.identifier}.appCodeName" id="{element.uniqueIdentifier}-appCodeName" /&gt;
 									&lt;f:form.hidden property="{element.identifier}.appName" id="{element.uniqueIdentifier}-appName" /&gt;
 									&lt;f:form.hidden property="{element.identifier}.appVersion" id="{element.uniqueIdentifier}-appVersion" /&gt;
@@ -246,9 +227,9 @@
 							</pre>
 							<pre>
 								<p class="filename">Classes/TestFormFactory.php</p>
-								<code class="php">
+								<code class="php" contenteditable="true">
 									// ...
-									$page1->createElement('browserInfo', 'FormTest:BrowserInfo')->setLabel('Browser info');
+									$page1->createElement('browserInfo', 'T3dd12:BrowserInfo')->setLabel('Browser info');
 									$formDefinition->createPage('preview', 'TYPO3.Form:PreviewPage');
 								</code>
 							</pre>
@@ -259,7 +240,7 @@
 						<div class="fragment">
 							<pre>
 								<p class="filename">Classes/BrowserInfoFormElement.php</p>
-								<code class="php">
+								<code class="php" contenteditable="true">
 									class BrowserInfoFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
 									  public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
 									    $elementValue = array(
@@ -272,16 +253,16 @@
 							</pre>
 							<pre>
 								<p class="filename">Configuration/Settings.yaml</p>
-								<code class="yaml">
+								<code class="yaml" contenteditable="true">
 									TYPO3:
 									  Form:
 									    presets:
 									      t3dd12:
 									        parentPreset: 'default'
 									        formElementTypes:
-									          'FormTest:BrowserInfo':
+									          'T3dd12:BrowserInfo':
 									          superTypes: ['TYPO3.Form:SingleLineText']
-									          implementationClassName: 'FormTest\BrowserInfoFormElement'
+									          implementationClassName: 'T3dd12\BrowserInfoFormElement'
 								</code>
 							</pre>
 						</div>
@@ -300,6 +281,38 @@
 							<li class="fragment">Execute arbitrary code (Closure)</li>
 						</ul>
 					</section>
+					<section data-state="soothe">
+						<h2>Demo</h2>
+						<div class="fragment">
+							<pre>
+								<code class="php" contenteditable="true">
+									<p class="filename">Classes/TestFormFactory.php</p>
+									// ...
+									$csvFinisher = new CsvFinisher();
+									$csvFinisher->setOption('pathAndFilename', \TYPO3\FLOW3\Utility\Files::concatenatePaths(array(FLOW3_PATH_DATA, 'form.csv')));
+									$formDefinition->addFinisher($csvFinisher);
+								</code>
+							</pre>
+							<pre>
+								<code class="php" contenteditable="true">
+									<p class="filename">Classes/CsvFinisher.php</p>
+									class CsvFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
+
+									  protected $defaultOptions = array(
+									    'pathAndFilename' => NULL
+									  );
+
+									  protected function executeInternal() {
+									    $pathAndFilename = $this->parseOption('pathAndFilename');
+									    $fileResource = fopen($pathAndFilename, 'a+');
+									    $formState = $this->finisherContext->getFormRuntime()->getFormState();
+									    fputcsv($fileResource, $formState->getFormValues());
+									  }
+									}
+								</code>
+							</pre>
+						</div>
+					</section>
 				</section>
 
 				<section>
@@ -314,112 +327,29 @@
 							<li class="fragment">CLI based forms</li>
 						</ul>
 					</section>
+					<section data-state="soothe">
+						<h2>Demo</h2>
+						<div class="fragment">
+							<pre>
+								<code contenteditable="true">
+									./flow3 form:render someForm
+								</code>
+							</pre>
+						</div>
+					</section>
 				</section>
 
 				<section>
-					<section data-state="alert">
-						<h2>Global State</h2>
-						<p>
-							Set <code>data-state="something"</code> on a slide and <code>"something"</code>
-							will be added as a class to the document element when the slide is open. This let's you
-							apply broader style changes, like switching the background.
-						</p>
-						<a href="#/7/1" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
-						</a>
-					</section>
-					<section data-state="blackout">
-						<h2>"blackout"</h2>
-						<a href="#/7/2" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png">
-						</a>
+					<section>
+						<h1>The Form Builder</h1>
 					</section>
 					<section data-state="soothe">
-						<h2>"soothe"</h2>
-						<a href="#/7/0" class="image">
-							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" style="-webkit-transform: rotate(180deg);">
-						</a>
+						<h2>Demo</h2>
 					</section>
 				</section>
 
 				<section>
-					<h2>Clever Quotes</h2>
-					<p>
-						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						The nice thing about standards is that there are so many to choose from</q> and block:
-					</p>
-					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
-						For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
-						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.
-					</blockquote>
-				</section>
-
-				<section>
-					<h2>Pretty Code</h2>
-					<pre><code contenteditable>
-	var supports3DTransforms =  document.body.style['webkitPerspective'] !== undefined ||
-					document.body.style['MozPerspective'] !== undefined ||
-					document.body.style['perspective'] !== undefined;
-
-	function linkify( selector ) {
-	    if( supports3DTransforms ) {
-
-	        var nodes = document.querySelectorAll( selector );
-
-	        for( var i = 0, len = nodes.length; i < len; i++ ) {
-	            var node = nodes[i];
-
-	            if( !node.className || !node.className.match( /roll/g ) ) {
-	                node.className += ' roll';
-	                node.innerHTML = '<span data-title="'+ node.text +'">' + node.innerHTML + '</span>';
-	            }
-	        };
-	    }
-	}
-
-	linkify( 'a' );
-					</code></pre>
-					<p>Courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
-				</section>
-
-				<section>
-					<h2>Intergalactic Interconnections</h2>
-					<p>
-						You can link between slides internally,<br/>
-						<a href="#/2/3">like this</a>.
-					</p>
-				</section>
-
-				<section>
-					<h2>Fragmented Views</h2>
-					<p>Hit the next arrow...</p>
-					<p class="fragment">... to step through ...</p>
-					<ol>
-						<li class="fragment"><code>any type</code></li>
-						<li class="fragment"><em>of view</em></li>
-						<li class="fragment"><strong>fragments</strong></li>
-					</ol>
-				</section>
-
-				<section>
-					<h2>Spectacular image!</h2>
-					<a class="image" href="http://hakim.se/experiments/html5/breakdom/" target="_blank">
-						<img width="320" height="412" src="https://s3.amazonaws.com/hakim-static/reveal-js/breakdom.png">
-					</a>
-				</section>
-
-				<section>
-					<h2>Stellar Links</h2>
-					<ul>
-						<li><a href="https://github.com/hakimel/reveal.js">Source code on github</a></li>
-						<li><a href="http://hakim.se/projects/reveal-js">Read more on my site</a></li>
-						<li><a href="http://twitter.com/hakimel">Follow me on Twitter</a></li>
-					</ul>
-				</section>
-
-				<section>
-					<h1>THE END</h1>
-					<h3 class="inverted">BY Hakim El Hattab / hakim.se</h3>
+					<h1>Thank you!</h1>
 				</section>
 			</div>
 
@@ -463,7 +393,7 @@
 				mouseWheel: true,
 
 				// Apply a 3D roll to links on hover
-				rollingLinks: true,
+				rollingLinks: false,
 
 				// UI style
 				theme: query.theme || 'default', // default/neon
