@@ -1,25 +1,35 @@
 <!doctype html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 
 	<head>
 		<meta charset="utf-8">
 
-		<title>The FLOW3 Form Project</title>
+		<title>The TYPO3 Flow Form Project</title>
 
-		<meta name="description" content="Slides for the TYPO3 Developer Days 2012 based on reveal.js by Hakim El Hattab">
+		<meta name="description" content="Slides for the T3CON12DE based on reveal.js by Hakim El Hattab">
 		<meta name="author" content="Bastian Waidelich">
 
 		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
-		<link rel="stylesheet" href="css/reset.css">
-		<link rel="stylesheet" href="css/main.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/typo3.css" id="theme">
 
-		<link rel="stylesheet" href="lib/zenburn.css">
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
 	</head>
 
 	<body>
 
-		<div id="reveal">
+		<div class="reveal">
 
 			<!-- Used to fade in a background when a specific slide state is reached -->
 			<div class="state-background"></div>
@@ -27,8 +37,27 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>FLOW3 Form Project</h1>
+					<h1>TYPO3 Flow Form Project</h1>
 					<h3 class="inverted">Flexible Form engine and graphical IDE</h3>
+				</section>
+
+				<section>
+					<h1>Bastian Waidelich</h1>
+					<ul>
+						<li>From Cologne, Germany</li>
+						<li>Working with TYPO3 since 2002</li>
+						<li>Member of the Core Team since 2008</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Agenda</h1>
+					<ul>
+						<li>What the form?</li>
+						<li>Flow Form API</li>
+						<li>Form Builder</li>
+						<li>Questions</li>
+					</ul>
 				</section>
 
 				<section>
@@ -41,7 +70,7 @@
 						<ul>
 							<li class="fragment">Dumb <small>(no proper validation)</small></li>
 							<li class="fragment">Oblivious <small>(forget their state & values after submission)</small></li>
-							<li class="fragment">Wasteful <small>(upload 1 Gigabyte and realize that this exceeds the allowed file size <b>afterwards</b>)</small></li>
+							<li class="fragment">Wasteful <small>(file size/type verification <strong>after</strong> upload)</small></li>
 							<li class="fragment">Stingy <small>(only a couple of native form elements)</small></li>
 							<li class="fragment">Stubborn <small>(poor x-browser compatibility)</small></li>
 						</ul>
@@ -51,12 +80,12 @@
 					<section>
 						<h2>Forms are important</h2>
 						<p class="fragment">Forms are still the main way to enable <b>client to server</b> data transmission</p>
-						<p class="fragment">Many use cases:</p>
+						<h3 class="fragment">Many use cases:</h3>
 						<ul>
 							<li class="fragment">Contact/mail forms</li>
 							<li class="fragment">Registration/Login</li>
 							<li class="fragment">Survey</li>
-							<li class="fragment">Setup <b class="fragment">TYPO3 Phoenix Install-Tool</b></li>
+							<li class="fragment">Setup <b class="fragment">TYPO3 Neos Install-Tool</b></li>
 							<li class="fragment">Create/Edit records <b class="fragment">TCEForms reloaded</b></li>
 						</ul>
 					</section>
@@ -64,20 +93,20 @@
 
 				<section>
 					<section>
-						<h1>FLOW3 Form Project</h1>
+						<h1>TYPO3 Flow Form Project</h1>
 						<ul class="fragment">
 							<li>Flexible framework</li>
 							<li>Clean API</li>
 							<li>Graphical User interface (aka <b>FormBuilder</b>)</li>
 						</ul>
 					</section>
-					<!--
 					<section>
-						<h2>Anatomy of a FLOW3 Form</h2>
-						<a href="#/3/2" class="image">
-							<img src="images/structure.png" width="800" height="590" />
+						<h2>Anatomy of a TYPO3 Flow Form</h2>
+						<a href="structure.html" class="image">
+							<img src="images/structure.png" width="50%" height="50%" />
 						</a>
 					</section>
+					<!--
 					<section>
 						<h2>Glossary</h2>
 						<dl>
@@ -112,50 +141,64 @@
 						<h2>Demo</h2>
 						<div class="fragment">
 							<pre>
-								<code class="html" contenteditable="true">
-									<p class="filename">Resources/Private/Templates/Standard/Index.html</p>
-									{namespace form=TYPO3\Form\ViewHelpers}
-									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/bootstrap.min.css')}"  rel="stylesheet" /&gt;
-									&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample', path: 'Css/main.css')}" rel="stylesheet" /&gt;
-									&lt;!-- ... --&gt;
-									&lt;form:render factoryClass="T3dd12\TestFormFactory" /&gt;
+								<code class="php" contenteditable="true">
+<p class="filename">Classes/TestFormFactory.php</p>
+class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
+
+  /**
+   * @param array $configuration
+   * @param string $presetName
+   * @return \TYPO3\Form\Core\Model\FormDefinition
+   */
+  public function build(array $configuration, $presetName) {
+    $formConfiguration = $this->getPresetConfiguration($presetName);
+    $formDefinition =
+      new \TYPO3\Form\Core\Model\FormDefinition('contactForm', $formConfiguration);
+
+    $page1 = $formDefinition->createPage('page1');
+
+    $name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
+    $name->setLabel('Name');
+    $name->addValidator(
+      new \TYPO3\Flow\Validation\Validator\NotEmptyValidator()
+    );
+
+    $email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
+    $email->setLabel('Email');
+    $email->addValidator(
+      new \TYPO3\Flow\Validation\Validator\NotEmptyValidator()
+    );
+    $email->addValidator(
+      new \TYPO3\Flow\Validation\Validator\EmailAddressValidator()
+    );
+
+    $comment = $page1->createElement('comment', 'TYPO3.Form:MultiLineText');
+    $comment->setLabel('Comment');
+    $comment->addValidator(
+      new \TYPO3\Flow\Validation\Validator\NotEmptyValidator()
+    );
+    $comment->addValidator(
+      new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3))
+    );
+
+    return $formDefinition;
+  }
+}
 								</code>
 							</pre>
 							<pre>
-								<code class="php" contenteditable="true">
-									<p class="filename">Classes/TestFormFactory.php</p>
-								class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
+								<code class="html" contenteditable="true">
+									<p class="filename">Resources/Private/Templates/Standard/Index.html</p>
+{namespace form=TYPO3\Form\ViewHelpers}
 
-								  /**
-								  * @param array $configuration
-								  * @param string $presetName
-								  * @return \TYPO3\Form\Core\Model\FormDefinition
-								  */
-								  public function build(array $configuration, $presetName) {
-								    $formConfiguration = $this->getPresetConfiguration($presetName);
-								    $formDefinition = new \TYPO3\Form\Core\Model\FormDefinition('contactForm', $formConfiguration);
+&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample',
+  path: 'Css/bootstrap.min.css')}"  rel="stylesheet" /&gt;
+&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample',
+  path: 'Css/main.css')}" rel="stylesheet" /&gt;
 
-								    $page1 = $formDefinition->createPage('page1');
+&lt;!-- ... --&gt;
 
-								    $name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
-								    $name->setLabel('Name');
-								    $name->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-
-								    $email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
-								    $email->setLabel('Email');
-								    $email->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-								    $email->addValidator(new \TYPO3\FLOW3\Validation\Validator\EmailAddressValidator());
-
-								    $comment = $page1->createElement('comment', 'TYPO3.Form:MultiLineText');
-								    $comment->setLabel('Comment');
-								    $comment->addValidator(new \TYPO3\FLOW3\Validation\Validator\NotEmptyValidator());
-								    $comment->addValidator(
-								      new \TYPO3\FLOW3\Validation\Validator\StringLengthValidator(array('minimum' => 3))
-								    );
-
-								    return $formDefinition;
-								  }
-								}
+&lt;form:render factoryClass="T3con12de\TestFormFactory" /&gt;
 								</code>
 							</pre>
 						</div>
@@ -166,8 +209,9 @@
 					<section>
 						<h2>FormElement</h2>
 						<p>The <b>FormElement</b> is represented by the actual input element but it can be any HTML/JavaScript snippet.</p>
+						<p>&nbsp;</p>
 						<div class="fragment">
-							<p>Provided FormElements (version 1.0):</p>
+							<h3>Provided FormElements (version 1.0):</h3>
 							<dl>
 								<dt>Text input</dt>
 								<dd>SingleLineText, MultiLineText</dd>
@@ -197,40 +241,41 @@
 							<pre>
 								<code class="yaml" contenteditable="true">
 									<p class="filename">Configuration/Settings.yaml</p>
-									TYPO3:
-									  Form:
-									    presets:
-									      t3dd12:
-									        parentPreset: 'default'
-									        formElementTypes:
-									          'T3dd12:BrowserInfo':
-									          superTypes: ['TYPO3.Form:SingleLineText']
+TYPO3:
+  Form:
+    presets:
+      t3con12de:
+        parentPreset: 'default'
+        formElementTypes:
+          'T3con12de:BrowserInfo':
+             superTypes: ['TYPO3.Form:SingleLineText']
 								</code>
 							</pre>
 							<pre>
 								<code class="html" contenteditable="true">
 									<p class="filename">Resources/Private/Form/BrowserInfo.html</p>
-									&lt;f:form.hidden property="{element.identifier}.appCodeName" id="{element.uniqueIdentifier}-appCodeName" /&gt;
-									&lt;f:form.hidden property="{element.identifier}.appName" id="{element.uniqueIdentifier}-appName" /&gt;
-									&lt;f:form.hidden property="{element.identifier}.appVersion" id="{element.uniqueIdentifier}-appVersion" /&gt;
-									&lt;f:form.hidden property="{element.identifier}.platform" id="{element.uniqueIdentifier}-platform" /&gt;
-									&lt;script&gt;
-									  var idPrefix = '{element.uniqueIdentifier}';
-									  &lt;![CDATA[
-									  document.getElementById(idPrefix + '-appCodeName').value = navigator.appCodeName;
-									  document.getElementById(idPrefix + '-appName').value = navigator.appName;
-									  document.getElementById(idPrefix + '-appVersion').value = navigator.appVersion;
-									  document.getElementById(idPrefix + '-platform').value = navigator.platform;
-									  ]]&gt;
-									&lt;/script&gt;
+&lt;f:form.hidden property="{element.identifier}.appCodeName" id="{element.uniqueIdentifier}-appCodeName" /&gt;
+&lt;f:form.hidden property="{element.identifier}.appName" id="{element.uniqueIdentifier}-appName" /&gt;
+&lt;f:form.hidden property="{element.identifier}.appVersion" id="{element.uniqueIdentifier}-appVersion" /&gt;
+&lt;f:form.hidden property="{element.identifier}.platform" id="{element.uniqueIdentifier}-platform" /&gt;
+&lt;script&gt;
+  var idPrefix = '{element.uniqueIdentifier}';
+  &lt;![CDATA[
+  document.getElementById(idPrefix + '-appCodeName').value = navigator.appCodeName;
+  document.getElementById(idPrefix + '-appName').value = navigator.appName;
+  document.getElementById(idPrefix + '-appVersion').value = navigator.appVersion;
+  document.getElementById(idPrefix + '-platform').value = navigator.platform;
+  ]]&gt;
+&lt;/script&gt;
 								</code>
 							</pre>
 							<pre>
 								<p class="filename">Classes/TestFormFactory.php</p>
 								<code class="php" contenteditable="true">
-									// ...
-									$page1->createElement('browserInfo', 'T3dd12:BrowserInfo')->setLabel('Browser info');
-									$formDefinition->createPage('preview', 'TYPO3.Form:PreviewPage');
+// ...
+
+$page1->createElement('browserInfo', 'T3con12de:BrowserInfo')->setLabel('Browser info');
+$formDefinition->createPage('preview', 'TYPO3.Form:PreviewPage');
 								</code>
 							</pre>
 						</div>
@@ -241,28 +286,28 @@
 							<pre>
 								<p class="filename">Classes/BrowserInfoFormElement.php</p>
 								<code class="php" contenteditable="true">
-									class BrowserInfoFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
-									  public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
-									    $elementValue = array(
-									      'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-',
-									      'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-'
-									    );
-									  }
-									}
+class BrowserInfoFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
+  public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
+    $elementValue = array(
+      'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-',
+      'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-'
+    );
+  }
+}
 								</code>
 							</pre>
 							<pre>
 								<p class="filename">Configuration/Settings.yaml</p>
 								<code class="yaml" contenteditable="true">
-									TYPO3:
-									  Form:
-									    presets:
-									      t3dd12:
-									        parentPreset: 'default'
-									        formElementTypes:
-									          'T3dd12:BrowserInfo':
-									          superTypes: ['TYPO3.Form:SingleLineText']
-									          implementationClassName: 'T3dd12\BrowserInfoFormElement'
+TYPO3:
+  Form:
+    presets:
+      t3con12de:
+        parentPreset: 'default'
+        formElementTypes:
+          'T3con12de:BrowserInfo':
+            superTypes: ['TYPO3.Form:SingleLineText']
+            implementationClassName: 'T3con12de\BrowserInfoFormElement'
 								</code>
 							</pre>
 						</div>
@@ -273,11 +318,13 @@
 					<section>
 						<h2>Finisher</h2>
 						<p>A <b>Finisher</b> is a piece of code that is executed when the <b>last page</b> of the form has been submitted successfully.</p>
-						<p class="fragment">Examples of Finishers:</p>
+						<p>&nbsp;</p>
+						<h3 class="fragment">Examples of Finishers:</h3>
 						<ul>
 							<li class="fragment">Email finisher</li>
 							<li class="fragment">Write form values to Database</li>
 							<li class="fragment">Redirect to some action</li>
+							<li class="fragment">Create/update records</li>
 							<li class="fragment">Execute arbitrary code (Closure)</li>
 						</ul>
 					</section>
@@ -287,28 +334,30 @@
 							<pre>
 								<code class="php" contenteditable="true">
 									<p class="filename">Classes/TestFormFactory.php</p>
-									// ...
-									$csvFinisher = new CsvFinisher();
-									$csvFinisher->setOption('pathAndFilename', \TYPO3\FLOW3\Utility\Files::concatenatePaths(array(FLOW3_PATH_DATA, 'form.csv')));
-									$formDefinition->addFinisher($csvFinisher);
+// ...
+
+$csvFinisher = new CsvFinisher();
+$csvFinisher->setOption('pathAndFilename',
+  \TYPO3\Flow\Utility\Files::concatenatePaths(array(FLOW_PATH_DATA, 'form.csv')));
+$formDefinition->addFinisher($csvFinisher);
 								</code>
 							</pre>
 							<pre>
 								<code class="php" contenteditable="true">
 									<p class="filename">Classes/CsvFinisher.php</p>
-									class CsvFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
+class CsvFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 
-									  protected $defaultOptions = array(
-									    'pathAndFilename' => NULL
-									  );
+  protected $defaultOptions = array(
+    'pathAndFilename' => NULL
+  );
 
-									  protected function executeInternal() {
-									    $pathAndFilename = $this->parseOption('pathAndFilename');
-									    $fileResource = fopen($pathAndFilename, 'a+');
-									    $formState = $this->finisherContext->getFormRuntime()->getFormState();
-									    fputcsv($fileResource, $formState->getFormValues());
-									  }
-									}
+  protected function executeInternal() {
+    $pathAndFilename = $this->parseOption('pathAndFilename');
+    $fileResource = fopen($pathAndFilename, 'a+');
+    $formState = $this->finisherContext->getFormRuntime()->getFormState();
+    fputcsv($fileResource, $formState->getFormValues());
+  }
+}
 								</code>
 							</pre>
 						</div>
@@ -319,7 +368,8 @@
 					<section>
 						<h2>Renderer</h2>
 						<p>A <b>Form Renderer</b> outputs a <em>FormDefinition</em> and/or single <em>FormElements</em> to the client.</p>
-						<p class="fragment">Examples of custom Renderers:</p>
+						<p>&nbsp;</p>
+						<h3 class="fragment">Examples of custom Renderers:</h3>
 						<ul>
 							<li class="fragment">Flash/Silverlight based forms</li>
 							<li class="fragment">Forms for mobile clients</li>
@@ -327,16 +377,18 @@
 							<li class="fragment">CLI based forms</li>
 						</ul>
 					</section>
+					<!--
 					<section data-state="soothe">
 						<h2>Demo</h2>
 						<div class="fragment">
 							<pre>
 								<code contenteditable="true">
-									./flow3 form:render someForm
+./flow form:render someForm
 								</code>
 							</pre>
 						</div>
 					</section>
+					-->
 				</section>
 
 				<section>
@@ -350,6 +402,20 @@
 
 				<section>
 					<h1>Thank you!</h1>
+					<dl>
+						<dt>Slides</dt>
+						<dd><a href="http://www.slideshare.net/bwaidelich">slideshare.net/bwaidelich</a></dd>
+						<dt>Documentation</dt>
+						<dd><a href="http://flow.typo3.org/documentation/guides/forms.html">flow.typo3.org/documentation/guides/forms.html</a></dd>
+						<dt>Examples</dt>
+						<dd><a href="http://git.typo3.org/FLOW3/Packages/TYPO3.FormExample.git">git.typo3.org/FLOW3/Packages/TYPO3.FormExample.git</a></dd>
+						<dt>Twitter</dt>
+						<dd><a href="http://twitter.com/bwaidelich">@bwaidelich</a></dd>
+					</dl>
+					<p>&nbsp</p>
+					<p>&nbsp</p>
+					<p>&nbsp</p>
+					<p style="text-align: right;"><small>slides created with <a href="http://lab.hakim.se/reveal-js">reveal.js</a></small></p>
 				</section>
 			</div>
 
@@ -366,43 +432,33 @@
 
 		</div>
 
-		<script src="js/reveal.js"></script>
-
-		<!-- Optional libraries for code syntax highlighting and classList support in IE9 -->
-		<script src="lib/highlight.js"></script>
-		<script src="lib/classList.js"></script>
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
 
 		<script>
-			// Parse the query string into a key/value object
-			var query = {};
-			location.search.replace( /[A-Z0-9]+?=(\w*)/gi, function(a) {
-				query[ a.split( '=' ).shift() ] = a.split( '=' ).pop();
-			} );
 
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-				// Display controls in the bottom right corner
 				controls: true,
-
-				// Display a presentation progress bar
 				progress: true,
-
-				// If true; each slide will be pushed to the browser history
 				history: true,
-
-				// Flags if mouse wheel navigation should be enabled
-				mouseWheel: true,
-
-				// Apply a 3D roll to links on hover
 				rollingLinks: false,
 
-				// UI style
-				theme: query.theme || 'default', // default/neon
+				theme: Reveal.getQueryHash().theme || 'typo3', // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'typo3', // default/cube/page/concave/linear(2d)
 
-				// Transition style
-				transition: query.transition || 'default' // default/cube/page/concave/linear(2d)
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/highlight.js', async: true, callback: function() { window.hljs.initHighlightingOnLoad(); } },
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'lib/js/data-markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '/socket.io/socket.io.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
+					{ src: 'plugin/speakernotes/client.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
+				]
 			});
 
-			hljs.initHighlightingOnLoad();
 		</script>
 
 	</body>
