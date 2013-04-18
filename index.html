@@ -1,434 +1,340 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+<head>
+	<meta charset="utf-8">
 
-		<title>The TYPO3 Flow Form Project</title>
+	<title>Neos technologies in Flow applications</title>
 
-		<meta name="description" content="Slides for the T3CON12DE based on reveal.js by Hakim El Hattab">
-		<meta name="author" content="Bastian Waidelich">
+	<meta name="description" content="Slides for the workshop at Inspiring Flow 2013">
+	<meta name="author" content="Christian Müller & Bastian Waidelich">
 
-		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/typo3.css" id="theme">
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/typo3.css" id="theme">
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+	<!-- For syntax highlighting -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
-		<script>
-			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
-		</script>
+	<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+	<script>
+		document.write('<link rel="stylesheet" href="css/print/' + ( window.location.search.match(/print-pdf/gi) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">');
+	</script>
 
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
+	<!--[if lt IE 9]>
+	<script src="lib/js/html5shiv.js"></script>
+	<![endif]-->
+</head>
 
 	<body>
 
 		<div class="reveal">
 
-			<!-- Used to fade in a background when a specific slide state is reached -->
-			<div class="state-background"></div>
-
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-				<section>
-					<h1>TYPO3 Flow Form Project</h1>
-					<h3 class="inverted">Flexible Form engine and graphical IDE</h3>
-				</section>
 
 				<section>
-					<h1>Bastian Waidelich</h1>
-					<ul>
-						<li>From Cologne, Germany</li>
-						<li>Working with TYPO3 since 2002</li>
-						<li>Member of the Core Team since 2008</li>
-					</ul>
+					<h1>Neos technologies in <br>Flow Applications</h1>
+					<h3 class="inverted">Content Repository, TypoScript and Embedded Expression Language</h3>
+					<p>
+						<small><a href="mailto:bastian@typo3.org">Bastian Waidelich</a> (<a href="http://www.twitter.com/bwaidelich">@bwaidelich</a>)
+							and <a href="mailto:christian.mueller@typo3.org">Christian Müller</a> (<a href="http://www.twitter.com/daskitsunet">@daskitsunet</a>)</small>
+					</p>
 				</section>
-
 				<section>
 					<h1>Agenda</h1>
 					<ul>
-						<li>What the form?</li>
-						<li>Flow Form API</li>
-						<li>Form Builder</li>
-						<li>Questions</li>
+						<li class="fragment">Introduction</li>
+						<li class="fragment">Neos Setup</li>
+						<li class="fragment">website integration</li>
+						<li class="fragment"><em>Lunch Break</em></li>
+						<li class="fragment">Flow and Neos side by side</li>
+						<li class="fragment">Flow in Neos</li>
+						<li class="fragment">Neos in Flow</li>
+						<li class="fragment">TypoScript and EEL</li>
 					</ul>
 				</section>
 
 				<section>
 					<section>
-						<h2>What are forms?</h2>
-						<blockquote class="fragment" cite="http://en.wikipedia.org/wiki/Form_(web)">Wikipedia: &quot;A webform on a web page allows a user to enter data that is sent to a server for processing.&quot;</blockquote>
+						<h1>TYPO3 Content Repository (TYPO3.TYPO3CR)</h1>
+						<p>
+							Hierarchical store for unstructured data.
+						</p>
+						<p>
+							Elements inside the store are called Nodes.
+						</p>
 					</section>
 					<section>
-						<h2>Forms are bad</h2>
+						<h2>Nodes are</h2>
 						<ul>
-							<li class="fragment">Dumb <small>(no proper validation)</small></li>
-							<li class="fragment">Oblivious <small>(forget their state & values after submission)</small></li>
-							<li class="fragment">Wasteful <small>(file size/type verification <strong>after</strong> upload)</small></li>
-							<li class="fragment">Stingy <small>(only a couple of native form elements)</small></li>
-							<li class="fragment">Stubborn <small>(poor x-browser compatibility)</small></li>
+							<li class="fragment">schema less</li>
+							<li class="fragment">in a nested tree structure</li>
+							<li class="fragment">any type of content you need.</li>
 						</ul>
-						<p>&nbsp;</p>
-						<p class="fragment"><small>* <a href="http://www.w3.org/MarkUp/Forms/#waXForms">XForms</a> promises remedy for some of the issues</small></p>
 					</section>
 					<section>
-						<h2>Forms are important</h2>
-						<p class="fragment">Forms are still the main way to enable <b>client to server</b> data transmission</p>
-						<h3 class="fragment">Many use cases:</h3>
+						<h2>NodeType</h2>
+						<p>
+							NodeType defines the schema for a node. Different nodes may have different
+							properties and work differently. For example Pages inherit from "Folder" types.
+							NodeTypes can have superTypes and so inherit properties from parent types.
+						</p>
+					</section>
+					<section>
+						<h2>Node structure</h2>
+						<p><img src="Resources/Images/node_structure1.png" /></p>
+					</section>
+					<section>
+						<h2>Node path addressing</h2>
+						<p><img src="Resources/Images/node_structure2.png" /></p>
+					</section>
+					<section>
+						<h2>Context</h2>
+
+						<p>
+							The Content Repository can operate in different contexts, a context defines a global
+							scope for nodes, like language or workspace. The same node can exist in all contexts
+							(but doesn't need to).
+						</p>
+					</section>
+					<section>
+						<h2>Usage outside of Neos</h2>
 						<ul>
-							<li class="fragment">Contact/mail forms</li>
-							<li class="fragment">Registration/Login</li>
-							<li class="fragment">Survey</li>
-							<li class="fragment">Setup <b class="fragment">TYPO3 Neos Install-Tool</b></li>
-							<li class="fragment">Create/Edit records <b class="fragment">TCEForms reloaded</b></li>
+							<li class="fragment">Store hierarchical data with different Types</li>
+							<li class="fragment">Define own Node Types</li>
+							<li class="fragment">Define your own node context</li>
 						</ul>
 					</section>
 				</section>
 
 				<section>
 					<section>
-						<h1>TYPO3 Flow Form Project</h1>
-						<ul class="fragment">
-							<li>Flexible framework</li>
-							<li>Clean API</li>
-							<li>Graphical User interface (aka <b>FormBuilder</b>)</li>
-						</ul>
+						<h1>TypoScript</h1>
+						<p>
+							TypoScript is intended as a configurable view
+						</p>
 					</section>
 					<section>
-						<h2>Anatomy of a TYPO3 Flow Form</h2>
-						<a href="structure.html" class="image">
-							<img src="images/structure.png" width="50%" height="50%" />
-						</a>
-					</section>
-					<!--
-					<section>
-						<h2>Glossary</h2>
-						<dl>
-							<dt>FormDefinition</dt>
-							<dd>Domain model of the Form</dd>
-							<dt>Page</dt>
-							<dd>Step of a form, each form consists of at least one page</dd>
-							<dt>FormElement</dt>
-							<dd>The actual input element. FormElements are attached to pages or sections</dd>
-							<dt>Section</dt>
-							<dd>A container element that groups a list of FormElements, e.g. fieldset</dd>
-							<dt>Finisher</dt>
-							<dd>PHP Code that is execute after the last page of a form has been submitted</dd>
-							<dt>ProcessingRule</dt>
-							<dd>Property mapping & validation rules for one or more FormElements</dd>
-							<dt>FormRuntime</dt>
-							<dd>The current state of a form with all its submitted data</dd>
-							<dt>Renderer</dt>
-							<dd>Renders the FormDefinition and all it's elements</dd>
-							<dt>FormFactory</dt>
-							<dd>Builds a FormDefinition</dd>
-						</dl>
-					</section>
-					-->
-				</section>
-
-				<section>
-					<section>
-						<h2>Creating a form</h2>
-					</section>
-					<section data-state="soothe">
-						<h2>Demo</h2>
-						<div class="fragment">
-							<pre>
-								<code class="php" contenteditable="true">
-<p class="filename">Classes/TestFormFactory.php</p>
-class TestFormFactory extends \TYPO3\Form\Factory\AbstractFormFactory {
-
-  /**
-   * @param array $configuration
-   * @param string $presetName
-   * @return \TYPO3\Form\Core\Model\FormDefinition
-   */
-  public function build(array $configuration, $presetName) {
-    $formConfiguration = $this->getPresetConfiguration($presetName);
-    $formDefinition =
-      new \TYPO3\Form\Core\Model\FormDefinition('contactForm', $formConfiguration);
-
-    $page1 = $formDefinition->createPage('page1');
-
-    $name = $page1->createElement('name', 'TYPO3.Form:SingleLineText');
-    $name->setLabel('Name');
-    $name->addValidator(
-      new \TYPO3\Flow\Validation\Validator\NotEmptyValidator()
-    );
-
-    $email = $page1->createElement('email', 'TYPO3.Form:SingleLineText');
-    $email->setLabel('Email');
-    $email->addValidator(
-      new \TYPO3\Flow\Validation\Validator\NotEmptyValidator()
-    );
-    $email->addValidator(
-      new \TYPO3\Flow\Validation\Validator\EmailAddressValidator()
-    );
-
-    $comment = $page1->createElement('comment', 'TYPO3.Form:MultiLineText');
-    $comment->setLabel('Comment');
-    $comment->addValidator(
-      new \TYPO3\Flow\Validation\Validator\NotEmptyValidator()
-    );
-    $comment->addValidator(
-      new \TYPO3\Flow\Validation\Validator\StringLengthValidator(array('minimum' => 3))
-    );
-
-    return $formDefinition;
-  }
-}
-								</code>
-							</pre>
-							<pre>
-								<code class="html" contenteditable="true">
-									<p class="filename">Resources/Private/Templates/Standard/Index.html</p>
-{namespace form=TYPO3\Form\ViewHelpers}
-
-&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample',
-  path: 'Css/bootstrap.min.css')}"  rel="stylesheet" /&gt;
-&lt;link href="{f:uri.resource(package: 'TYPO3.FormExample',
-  path: 'Css/main.css')}" rel="stylesheet" /&gt;
-
-&lt;!-- ... --&gt;
-
-&lt;form:render factoryClass="T3con12de\TestFormFactory" /&gt;
-								</code>
-							</pre>
-						</div>
-					</section>
-				</section>
-
-				<section>
-					<section>
-						<h2>FormElement</h2>
-						<p>The <b>FormElement</b> is represented by the actual input element but it can be any HTML/JavaScript snippet.</p>
-						<p>&nbsp;</p>
-						<div class="fragment">
-							<h3>Provided FormElements (version 1.0):</h3>
-							<dl>
-								<dt>Text input</dt>
-								<dd>SingleLineText, MultiLineText</dd>
-								<dt>Selection</dt>
-								<dd>Checkbox, SingleSelectDropdown, MultipleSelectDropdown, MultipleSelectCheckboxes</dd>
-								<dt>Widgets</dt>
-								<dd>DatePicker, FileUpload, ImageUpload</dd>
-								<dt>Container</dt>
-								<dd>Section, Page, PreviewPage</dd>
-							</dl>
-						</div>
+						<h2>Syntax</h2>
+						<p>
+							<pre><code>
+						# defining a prototype from implementation class
+						prototype(TYPO3.TypoScript:Template).@class = 'TYPO3\\TypoScript\\TypoScriptObjects\\TemplateImplementation'
+						# Using a prototype
+						title = TYPO3.TypoScript:Template
+						# simple quoted string value assignment
+						title.templatePath = 'resource://someResourcePath'
+						# EEL Expression
+						title.items = ${q(node).add(q(node).parents())}
+						# Applying a processor
+						title << 1.wrap(prefix:'<title>', suffix: '</title>')
+						# prototype short name from defined default namespace
+						# opening braces can be inlined with prototype usage
+						mainMenu = Menu {
+							# simple integer value assignment
+							entryLevel = 2
+						}
+							</code></pre>
+						</p>
 					</section>
 					<section>
-						<h2>Custom FormElements</h2>
-
-						<p class="fragment">Examples of custom FormElements:</p>
+						<h2>Features</h2>
 						<ul>
-							<li class="fragment">Mass uploader</li>
-							<li class="fragment">Date/Time picker</li>
-							<li class="fragment">Conditional Elements</li>
-							<li class="fragment">Scripts (e.g. collect browser details)</li>
+							<li class="fragment">TypoScript objects</li>
+							<li class="fragment">Context</li>
+							<li class="fragment">Prototype configuration</li>
+							<li class="fragment">Processors</li>
+							<li class="fragment">Out Of Band Rendering</li>
 						</ul>
 					</section>
-					<section data-state="soothe">
-						<h2>Demo (Fluid)</h2>
-						<div class="fragment">
-							<pre>
-								<code class="yaml" contenteditable="true">
-									<p class="filename">Configuration/Settings.yaml</p>
-TYPO3:
-  Form:
-    presets:
-      t3con12de:
-        parentPreset: 'default'
-        formElementTypes:
-          'T3con12de:BrowserInfo':
-             superTypes: ['TYPO3.Form:SingleLineText']
-								</code>
-							</pre>
-							<pre>
-								<code class="html" contenteditable="true">
-									<p class="filename">Resources/Private/Form/BrowserInfo.html</p>
-&lt;f:form.hidden property="{element.identifier}.appCodeName" id="{element.uniqueIdentifier}-appCodeName" /&gt;
-&lt;f:form.hidden property="{element.identifier}.appName" id="{element.uniqueIdentifier}-appName" /&gt;
-&lt;f:form.hidden property="{element.identifier}.appVersion" id="{element.uniqueIdentifier}-appVersion" /&gt;
-&lt;f:form.hidden property="{element.identifier}.platform" id="{element.uniqueIdentifier}-platform" /&gt;
-&lt;script&gt;
-  var idPrefix = '{element.uniqueIdentifier}';
-  &lt;![CDATA[
-  document.getElementById(idPrefix + '-appCodeName').value = navigator.appCodeName;
-  document.getElementById(idPrefix + '-appName').value = navigator.appName;
-  document.getElementById(idPrefix + '-appVersion').value = navigator.appVersion;
-  document.getElementById(idPrefix + '-platform').value = navigator.platform;
-  ]]&gt;
-&lt;/script&gt;
-								</code>
-							</pre>
-							<pre>
-								<p class="filename">Classes/TestFormFactory.php</p>
-								<code class="php" contenteditable="true">
-// ...
-
-$page1->createElement('browserInfo', 'T3con12de:BrowserInfo')->setLabel('Browser info');
-$formDefinition->createPage('preview', 'TYPO3.Form:PreviewPage');
-								</code>
-							</pre>
-						</div>
-					</section>
-					<section data-state="soothe">
-						<h2>Demo (PHP)</h2>
-						<div class="fragment">
-							<pre>
-								<p class="filename">Classes/BrowserInfoFormElement.php</p>
-								<code class="php" contenteditable="true">
-class BrowserInfoFormElement extends \TYPO3\Form\Core\Model\AbstractFormElement {
-  public function onSubmit(\TYPO3\Form\Core\Runtime\FormRuntime $formRuntime, &$elementValue) {
-    $elementValue = array(
-      'userAgent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '-',
-      'referrer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-'
-    );
-  }
-}
-								</code>
-							</pre>
-							<pre>
-								<p class="filename">Configuration/Settings.yaml</p>
-								<code class="yaml" contenteditable="true">
-TYPO3:
-  Form:
-    presets:
-      t3con12de:
-        parentPreset: 'default'
-        formElementTypes:
-          'T3con12de:BrowserInfo':
-            superTypes: ['TYPO3.Form:SingleLineText']
-            implementationClassName: 'T3con12de\BrowserInfoFormElement'
-								</code>
-							</pre>
-						</div>
-					</section>
-				</section>
-
-				<section>
 					<section>
-						<h2>Finisher</h2>
-						<p>A <b>Finisher</b> is a piece of code that is executed when the <b>last page</b> of the form has been submitted successfully.</p>
-						<p>&nbsp;</p>
-						<h3 class="fragment">Examples of Finishers:</h3>
+						<h2>TypoScript Objects</h2>
+						<p>
+							PHP implementations of functionality accessible in TypoScript.
+							For example a Menu.
+						</p>
+						<p><img src="Resources/Images/TypoScriptObjectCode.png" /></p>
+					</section>
+					<section>
+						<h2>Base TypoScript Objects</h2>
+
+						<p><small><code>\TYPO3\TypoScript\TypoScriptObjects\ArrayImplementation</code></small><br>
+						Collection of TypoScript objects that get rendered and their output is concatenated.</p>
+						<p><small><code>\TYPO3\TypoScript\TypoScriptObjects\CaseImplementation</code></small><br>
+						A switch to branch rendering depending on a set of Matchers. Each matcher is consulted in order and if the Matcher condition matches this element is rendered and returned.</p>
+						<p><small><code>\TYPO3\TypoScript\TypoScriptObjects\MatcherImplementation</code></small><br>
+						The actual Matcher implementation for the Case object. A matcher has a condition that must evaluate to boolean TRUE to have this matcher render.</p>
+						<p><small><code>\TYPO3\TypoScript\TypoScriptObjects\CollectionImplementation</code></small><br>
+						Iterates over a collection of elements (for example nodes or objects) to render each element and concatenate the result.</p>
+						<p><small><code>\TYPO3\TypoScript\TypoScriptObjects\TemplateImplementation</code></small><br>
+						Renders a Fluid template.
+						</p>
+						<p><small><code>\TYPO3\TypoScript\TypoScriptObjects\ValueImplementation</code></small><br>
+						Renders a simple value
+						</p>
+					</section>
+					<section>
+						<h2>TypoScript Context</h2>
+						<p>
+							Available data in TypoScript, can be accessed by TypoScript objects and EEL.
+							View variables are the context.
+						</p>
+						<p><img src="Resources/Images/AssigningVariablesToTypoScript.png" /></p>
+					</section>
+					<section>
+						<h2>Prototype Configuration</h2>
+						<p>
+							Prototypes are the building blocks of TypoScript. You either create a new prototype with a
+							implementation class or you inherit from one of the existing prototypes and change the settings.
+						</p>
+						<p><img src="Resources/Images/PrototypeDefinition.png" /></p>
+					</section>
+					<section>
+						<h2>Processors</h2>
+						<p>
+							Processors can be used to modify values in TypoScript. They are similar to stdWrap in TYPO3 CMS.
+							<pre><code>
+								# wrapping the title with title tags
+								title << 1.wrap(prefix:'&lt;title&gt;', suffix: '&lt;/title&gt;')
+
+								# converting the maximumLevels value to integer (maybe saved as string)
+								maximumLevels << 1.toInteger()
+							</code></pre>
+						</p>
+					</section>
+					<section>
+						<h2>Out Of Band Rendering</h2>
+						<p>
+							TypoScript is side effect free and via full addressing you are able to render any sub element as needed.
+							Can be useful for AJAX.
+						</p>
+					</section>
+					<section>
+						<h2>Usage outside of Neos</h2>
 						<ul>
-							<li class="fragment">Email finisher</li>
-							<li class="fragment">Write form values to Database</li>
-							<li class="fragment">Redirect to some action</li>
-							<li class="fragment">Create/update records</li>
-							<li class="fragment">Execute arbitrary code (Closure)</li>
+							<li>Flexible and Extensible Rendering</li>
+							<li>Useful when dealing with collections, traversal, modules</li>
+							<li>Create new TypoScript objects</li>
+							<li>Add new processors</li>
 						</ul>
-					</section>
-					<section data-state="soothe">
-						<h2>Demo</h2>
-						<div class="fragment">
-							<pre>
-								<code class="php" contenteditable="true">
-									<p class="filename">Classes/TestFormFactory.php</p>
-// ...
-
-$csvFinisher = new CsvFinisher();
-$csvFinisher->setOption('pathAndFilename',
-  \TYPO3\Flow\Utility\Files::concatenatePaths(array(FLOW_PATH_DATA, 'form.csv')));
-$formDefinition->addFinisher($csvFinisher);
-								</code>
-							</pre>
-							<pre>
-								<code class="php" contenteditable="true">
-									<p class="filename">Classes/CsvFinisher.php</p>
-class CsvFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
-
-  protected $defaultOptions = array(
-    'pathAndFilename' => NULL
-  );
-
-  protected function executeInternal() {
-    $pathAndFilename = $this->parseOption('pathAndFilename');
-    $fileResource = fopen($pathAndFilename, 'a+');
-    $formState = $this->finisherContext->getFormRuntime()->getFormState();
-    fputcsv($fileResource, $formState->getFormValues());
-  }
-}
-								</code>
-							</pre>
-						</div>
 					</section>
 				</section>
 
 				<section>
 					<section>
-						<h2>Renderer</h2>
-						<p>A <b>Form Renderer</b> outputs a <em>FormDefinition</em> and/or single <em>FormElements</em> to the client.</p>
-						<p>&nbsp;</p>
-						<h3 class="fragment">Examples of custom Renderers:</h3>
+						<h1>Embedded Expression Language (EEL)</h1>
+						<p>
+							EEL was created for accessing and traversing data and collections, additionally it can do
+							boolean comparisons and simple arithmetic. It is used to traverse the node hierarchy and
+							make node data accessible inside TypoScript.
+						</p>
+					</section>
+					<section>
+						<h2>Features</h2>
 						<ul>
-							<li class="fragment">Flash/Silverlight based forms</li>
-							<li class="fragment">Forms for mobile clients</li>
-							<li class="fragment">Integrate other Templating Engines</li>
-							<li class="fragment">CLI based forms</li>
+							<li class="fragment">context access</li>
+							<li class="fragment">FlowQuery operations to work with object collections</li>
+							<li class="fragment">Boolean expressions</li>
+							<li class="fragment">Arithmetic</li>
 						</ul>
 					</section>
-					<!--
-					<section data-state="soothe">
-						<h2>Demo</h2>
-						<div class="fragment">
-							<pre>
-								<code contenteditable="true">
-./flow form:render someForm
-								</code>
-							</pre>
-						</div>
-					</section>
-					-->
-				</section>
-
-				<section>
 					<section>
-						<h1>The Form Builder</h1>
-					</section>
-					<section data-state="soothe">
-						<h2>Demo</h2>
-					</section>
-				</section>
+						<h2>Syntax</h2>
+						<pre>
+							<code>
+								# ${} are the delimiters for EEL expressions inside TypoScript.
+								# The actual EEL expression is everything inside of the braces.
 
-				<section>
-					<h1>Thank you!</h1>
-					<dl>
-						<dt>Slides</dt>
-						<dd><a href="http://www.slideshare.net/bwaidelich">slideshare.net/bwaidelich</a></dd>
-						<dt>Documentation</dt>
-						<dd><a href="http://flow.typo3.org/documentation/guides/forms.html">flow.typo3.org/documentation/guides/forms.html</a></dd>
-						<dt>Examples</dt>
-						<dd><a href="http://git.typo3.org/FLOW3/Packages/TYPO3.FormExample.git">git.typo3.org/FLOW3/Packages/TYPO3.FormExample.git</a></dd>
-						<dt>Twitter</dt>
-						<dd><a href="http://twitter.com/bwaidelich">@bwaidelich</a></dd>
-					</dl>
-					<p>&nbsp</p>
-					<p>&nbsp</p>
-					<p>&nbsp</p>
-					<p style="text-align: right;"><small>slides created with <a href="http://lab.hakim.se/reveal-js">reveal.js</a></small></p>
+								# accessing an element from the TypoScript context
+								nodePath = ${nodePath}
+								# boolean value (this returns boolean true)
+								condition = ${true}
+
+								# FlowQuery operation to access (node) property
+								# q() is the delimiter for a flow query operation in EEL
+								text = ${q(node).property('text')}
+
+								# FlowQuery operation to generate a rootline of parent nodes
+								title.items = ${q(node).add(q(node).parents())}
+
+								# If statement with FlowQuery operation is() which uses filtering syntax
+								collection = ${q(node).is('[instanceof TYPO3.Neos.NodeTypes:Section]') ? q(node).children() : q(node).children(this.getNodePath()).children()}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Context access</h2>
+						<p>EEL exposes the content of the context on top level.</p>
+						<pre><code>
+							# Access an element / property called nodePath on the context
+							# this is an example from Neos where the context is always an array, so actually you
+							# get the value of $context['nodePath']
+							${nodePath}
+
+							# This is an example from the upcoming view configuration
+							# The context is here directly set to an object
+							# we are calling a method on the object and return the result
+							# The result will be of the same type as the method return value
+							${isPackage("TYPO3.Flow")}
+						</code></pre>
+					</section>
+					<section>
+						<h2>FlowQuery object access and traversal</h2>
+						<p>With FlowQuery operations you can traverse hierarchies and access property paths.</p>
+						<pre>
+							<code>
+								# In Neos nodes can be traversed and there are specific FlowQuery operations
+								# working on node trees.
+								${q(node).children()}
+
+								# Operations can support filtering the result collection too
+								# Here we only get children that are of NodeType TYPO3.Neos.NodeTypes:Section
+								${q(node).children('[instanceof TYPO3.Neos.NodeTypes:Section]')}
+
+								# Looks very similar to the first example, but here we actually traverse a Flow
+								# model hierarchy and fetch child categories, in this case we need to give the name
+								# of the property which contains the child objects.
+								${q(activeCategory).children('children')}
+							</code>
+						</pre>
+					</section>
+					<section>
+						<h2>Boolean comparison</h2>
+
+						<pre><code>
+							# Checking if the children collection contains any elements
+							${q(activeCategory).children('children').count() > 0}
+
+							# we are calling two methods on an object and do a boolean AND with the returns
+							# The result will be a boolean value
+							${isPackage("TYPO3.Flow") && isController("ViewsConfigurationTestC")}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Arithmetic</h2>
+
+						<pre><code>
+							# Adding simple values
+							${1 + 2}
+
+							# Dividing 100(%) by the number of columns (some context variable)
+							# to determine a column width
+							${100 % columns}
+						</code></pre>
+					</section>
+					<section>
+						<h2>Usage outside of Neos</h2>
+						<ul>
+							<li class="fragment">Dynamic configuration</li>
+							<li class="fragment">object access</li>
+							<li class="fragment">collection filtering</li>
+							<li class="fragment">add own FlowQuery operations</li>
+						</ul>
+					</section>
 				</section>
 			</div>
-
-			<!-- The navigational controls UI -->
-			<aside class="controls">
-				<a class="left" href="#">&#x25C4;</a>
-				<a class="right" href="#">&#x25BA;</a>
-				<a class="up" href="#">&#x25B2;</a>
-				<a class="down" href="#">&#x25BC;</a>
-			</aside>
-
-			<!-- Displays presentation progress, max value changes via JS to reflect # of slides -->
-			<div class="progress"><span></span></div>
 
 		</div>
 
@@ -443,19 +349,21 @@ class CsvFinisher extends \TYPO3\Form\Core\Model\AbstractFinisher {
 				controls: true,
 				progress: true,
 				history: true,
-				rollingLinks: false,
+				center: true,
 
-				theme: Reveal.getQueryHash().theme || 'typo3', // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'typo3', // default/cube/page/concave/linear(2d)
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
 				// Optional libraries used to extend on reveal.js
 				dependencies: [
-					{ src: 'lib/js/highlight.js', async: true, callback: function() { window.hljs.initHighlightingOnLoad(); } },
 					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'lib/js/data-markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '/socket.io/socket.io.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
-					{ src: 'plugin/speakernotes/client.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
 				]
 			});
 
