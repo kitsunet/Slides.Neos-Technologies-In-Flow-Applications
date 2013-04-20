@@ -65,6 +65,7 @@
 		<li><a href="http://tinyurl.com/neos-workshop-slides">http://tinyurl.com/neos-workshop-slides</a></li>
 		<li><a href="http://tinyurl.com/neos-workshop-neos">http://tinyurl.com/neos-workshop-neos</a></li>
 		<li><a href="http://tinyurl.com/neos-workshop-bookshop">http://tinyurl.com/neos-workshop-bookshop</a></li>
+		<li><a href="https://github.com/bwaidelich/Acme.BookCollection">https://github.com/bwaidelich/Acme.BookCollection</a></li>
 	</ul>
 </section>
 <section>
@@ -138,23 +139,23 @@
 
 		<p>
 							<pre><code>
-								# defining a prototype from implementation class
-								prototype(TYPO3.TypoScript:Template).@class =
-								'TYPO3\\TypoScript\\TypoScriptObjects\\TemplateImplementation'
-								# Using a prototype
-								title = TYPO3.TypoScript:Template
-								# simple quoted string value assignment
-								title.templatePath = 'resource://someResourcePath'
-								# EEL Expression
-								title.items = ${q(node).add(q(node).parents())}
-								# Applying a processor
-								title << 1.wrap(prefix:'<title>', suffix: '</title>')
-								# prototype short name from defined default namespace
-								# opening braces can be inlined with prototype usage
-								mainMenu = Menu {
-								# simple integer value assignment
-								entryLevel = 2
-								}
+# defining a prototype from implementation class
+prototype(TYPO3.TypoScript:Template).@class =
+'TYPO3\\TypoScript\\TypoScriptObjects\\TemplateImplementation'
+# Using a prototype
+title = TYPO3.TypoScript:Template
+# simple quoted string value assignment
+title.templatePath = 'resource://someResourcePath'
+# EEL Expression
+title.items = ${q(node).add(q(node).parents())}
+# Applying a processor
+title << 1.wrap(prefix:'<title>', suffix: '</title>')
+# prototype short name from defined default namespace
+# opening braces can be inlined with prototype usage
+mainMenu = Menu {
+# simple integer value assignment
+entryLevel = 2
+}
 							</code></pre>
 		</p>
 	</section>
@@ -291,24 +292,24 @@
 		<h2>Syntax</h2>
 						<pre>
 							<code>
-								# ${} are the delimiters for EEL expressions inside TypoScript.
-								# The actual EEL expression is everything inside of the braces.
+# ${} are the delimiters for EEL expressions inside TypoScript.
+# The actual EEL expression is everything inside of the braces.
 
-								# accessing an element from the TypoScript context
-								nodePath = ${nodePath}
-								# boolean value (this returns boolean true)
-								condition = ${true}
+# accessing an element from the TypoScript context
+nodePath = ${nodePath}
+# boolean value (this returns boolean true)
+condition = ${true}
 
-								# FlowQuery operation to access (node) property
-								# q() is the delimiter for a flow query operation in EEL
-								text = ${q(node).property('text')}
+# FlowQuery operation to access (node) property
+# q() is the delimiter for a flow query operation in EEL
+text = ${q(node).property('text')}
 
-								# FlowQuery operation to generate a rootline of parent nodes
-								title.items = ${q(node).add(q(node).parents())}
+# FlowQuery operation to generate a rootline of parent nodes
+title.items = ${q(node).add(q(node).parents())}
 
-								# If statement with FlowQuery operation is() which uses filtering syntax
-								collection =
-								${q(node).is('[instanceof TYPO3.Neos.NodeTypes:Section]') ? q(node).children() : q(node).children(this.getNodePath()).children()}
+# If statement with FlowQuery operation is() which uses filtering syntax
+collection =
+${q(node).is('[instanceof TYPO3.Neos.NodeTypes:Section]') ? q(node).children() : q(node).children(this.getNodePath()).children()}
 							</code>
 						</pre>
 	</section>
@@ -317,16 +318,16 @@
 
 		<p>EEL exposes the content of the context on top level.</p>
 						<pre><code>
-							# Access an element / property called nodePath on the context
-							# this is an example from Neos where the context is always an array, so actually you
-							# get the value of $context['nodePath']
-							${nodePath}
+# Access an element / property called nodePath on the context
+# this is an example from Neos where the context is always an array, so actually you
+# get the value of $context['nodePath']
+${nodePath}
 
-							# This is an example from the upcoming view configuration
-							# The context is here directly set to an object
-							# we are calling a method on the object and return the result
-							# The result will be of the same type as the method return value
-							${isPackage("TYPO3.Flow")}
+# This is an example from the upcoming view configuration
+# The context is here directly set to an object
+# we are calling a method on the object and return the result
+# The result will be of the same type as the method return value
+${isPackage("TYPO3.Flow")}
 						</code></pre>
 	</section>
 	<section>
@@ -335,18 +336,18 @@
 		<p>With FlowQuery operations you can traverse hierarchies and access property paths.</p>
 						<pre>
 							<code>
-								# In Neos nodes can be traversed and there are specific FlowQuery operations
-								# working on node trees.
-								${q(node).children()}
+# In Neos nodes can be traversed and there are specific FlowQuery operations
+# working on node trees.
+${q(node).children()}
 
-								# Operations can support filtering the result collection too
-								# Here we only get children that are of NodeType TYPO3.Neos.NodeTypes:Section
-								${q(node).children('[instanceof TYPO3.Neos.NodeTypes:Section]')}
+# Operations can support filtering the result collection too
+# Here we only get children that are of NodeType TYPO3.Neos.NodeTypes:Section
+${q(node).children('[instanceof TYPO3.Neos.NodeTypes:Section]')}
 
-								# Looks very similar to the first example, but here we actually traverse a Flow
-								# model hierarchy and fetch child categories, in this case we need to give the name
-								# of the property which contains the child objects.
-								${q(activeCategory).children('children')}
+# Looks very similar to the first example, but here we actually traverse a Flow
+# model hierarchy and fetch child categories, in this case we need to give the name
+# of the property which contains the child objects.
+${q(activeCategory).children('children')}
 							</code>
 						</pre>
 	</section>
@@ -354,24 +355,24 @@
 		<h2>Boolean comparison</h2>
 
 						<pre><code>
-							# Checking if the children collection contains any elements
-							${q(activeCategory).children('children').count() > 0}
+# Checking if the children collection contains any elements
+${q(activeCategory).children('children').count() > 0}
 
-							# we are calling two methods on an object and do a boolean AND with the returns
-							# The result will be a boolean value
-							${isPackage("TYPO3.Flow") && isController("ViewsConfigurationTestC")}
+# we are calling two methods on an object and do a boolean AND with the returns
+# The result will be a boolean value
+${isPackage("TYPO3.Flow") && isController("ViewsConfigurationTestC")}
 						</code></pre>
 	</section>
 	<section>
 		<h2>Arithmetic</h2>
 
 						<pre><code>
-							# Adding simple values
-							${1 + 2}
+# Adding simple values
+${1 + 2}
 
-							# Dividing 100(%) by the number of columns (some context variable)
-							# to determine a column width
-							${100 % columns}
+# Dividing 100(%) by the number of columns (some context variable)
+# to determine a column width
+${100 % columns}
 						</code></pre>
 	</section>
 	<section>
